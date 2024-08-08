@@ -2,10 +2,12 @@ package com.example.board.domain.member.entity;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Getter
 public class Member {
     // IDENTITY값을 자동으로 생성하겠다는 의미
     //@Column에서 name은 Column 명, nullable은 null값 허용 여부
@@ -30,4 +32,13 @@ public class Member {
     @Column(name="email",nullable = false)
     private String email;
 
+    public Member(String memberId, String password, String name, String call, Gender gender, String nickName, String email) {
+        this.memberId = memberId;
+        this.password = password;
+        this.name = name;
+        this.call = call;
+        this.gender = gender;
+        this.nickName = nickName;
+        this.email = email;
+    }
 }
