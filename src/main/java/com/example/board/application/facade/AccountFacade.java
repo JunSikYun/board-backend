@@ -4,6 +4,8 @@ import com.example.board.application.dto.request.CreateAccountRequest;
 import com.example.board.application.dto.response.CanUseMemberIdResponse;
 import com.example.board.domain.member.entity.Member;
 import com.example.board.domain.member.service.MemberService;
+import com.example.board.global.exception.BaseException;
+import com.example.board.global.exception.ErrorCode;
 import com.example.board.global.jwt.JwtProvider;
 import jakarta.persistence.Access;
 import lombok.AccessLevel;
@@ -29,11 +31,9 @@ public class AccountFacade {
     public void registerMember(CreateAccountRequest createAccountRequest){
         //1. memberId가 존재하면 오류 발생 필요
 
-
-
         String memberId=createAccountRequest.getMemberId();
         if(memberService.existsByMemberId(memberId)){
-            throw new RuntimeException();
+            throw BaseException.from(ErrorCode.MEMBER_ALREADY_EXISTS);
         }
         Member member=createAccountRequest.toMember();
         memberService.save(member);
@@ -49,7 +49,7 @@ public class AccountFacade {
 
         String databasePassword=member.getPassword();
         if(!BCrypt.checkpw(password,databasePassword)){
-            throw new RuntimeException();
+            throw BaseException.from(ErrorCode.INVAILD_PASSWORD);
         }
         //여기서 jwt 발급 필요
 
